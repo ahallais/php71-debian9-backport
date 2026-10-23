@@ -1,0 +1,18 @@
+# Build outputs and logs
+*.log
+phpt/*.log
+
+# Intermediate / test package directories
+out/
+new/
+old/
+snap/
+
+# Bootstrapped base system tarball (exceeds GitHub's 100MB file limit)
+# Recreate with: docker run --rm --privileged -v $PWD/rootfs:/out debian:bookworm ... (see build.md step 3)
+rootfs/*.tar.gz
+
+# Quilt metadata and temporary extraction directories
+sury/build/*/.pc/
+sury/deb/
+sury/defaults/

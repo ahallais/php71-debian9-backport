@@ -1,0 +1,35 @@
+php7.0 (7.1.33-75) unstable; urgency=medium
+
+  * The systemd unit file has been hardened.  Extra options from
+    sapi/fpm/php-fpm.service.in has been used:
+
+    ProtectSystem=full
+    PrivateDevices=true
+    ProtectKernelModules=true
+    ProtectKernelTunables=true
+    ProtectControlGroups=true
+    RestrictRealtime=true
+    RestrictAddressFamilies=AF_INET AF_INET6 AF_NETLINK AF_UNIX
+    RestrictNamespaces=true
+
+    This should work in the default environments, but you might need
+    to modify the systemd unit file if you are using less standard
+    FPM configuration.  
+
+ -- Ondřej Surý <ondrej@debian.org>  Sun, 10 May 2026 19:40:41 +0200
+
+php7.0 (7.0.3-6) unstable; urgency=medium
+
+  * Several extensions have been split into separate extension packages:
+   - php-dba - Database (dbm-style) Abstraction Layer
+   - php-mbstring - Multibyte String
+   - php-soap - SOAP
+   - php-xml - DOM, SimpleXML, WDDX, XML, XMLReader and XMLWriter
+   - php-zip - Zip
+  * The new packages are not installed automatically, so you will need to
+    install them by hand, if you use the functions in those modules.
+  * Most modules that have been builtin before are now included in
+    php7.0-common package and they are enabled by default for your
+    convenience.  You can disable unneede modules via phpdismod tool.
+
+ -- Ondřej Surý <ondrej@debian.org>  Mon, 22 Feb 2016 12:37:09 +0100

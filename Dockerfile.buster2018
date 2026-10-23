@@ -1,0 +1,30 @@
+# Build php7.1 7.1.33-80 (Sury backport of CVE-2026-109618 / CVE-2026-109619)
+# against Debian buster as of 2018-08-01: the same library set (libc6 2.27-5, libcurl4,
+# libicu60, libgd3 2.2.5, libncurses6) already present on the "stretch" VMs that run
+# Debian's php7.1 7.1.20-1.
+FROM scratch
+ADD rootfs/buster-20180801.tar.gz /
+
+ENV DEBIAN_FRONTEND=noninteractive LANG=C.UTF-8
+
+RUN echo 'deb https://snapshot.debian.org/archive/debian/20180801T000000Z/ buster main' > /etc/apt/sources.list \
+ && echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-valid-until \
+ && echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/99retries \
+ && apt-get update \
+ && apt-get install -y --no-install-recommends devscripts equivs quilt fakeroot
+
+COPY sury/build/php7.1-7.1.33 /src/php7.1-7.1.33
+COPY sury/php7.1_7.1.33.orig.tar.xz /src/
+WORKDIR /src/php7.1-7.1.33
+
+RUN mk-build-deps debian/control \
+ && apt-get install -y --no-install-recommends ./php7.1-build-deps_*.deb \
+ && rm -f php7.1-build-deps_*
+
+# Local version suffix so it sorts above 7.1.20-1 and is identifiable on the hosts
+RUN DEBEMAIL="arnaud.hallais@havas.com" DEBFULLNAME="Arnaud Hallais" \
+    dch -b -v 7.1.33-80~deb9+1 -D stretch \
+    "Rebuild of Sury 7.1.33-80 against buster@2018-08-01 libs for mixed stretch hosts (CVE-2026-109618, CVE-2026-109619); telemetry patch 0177 dropped; php-common dependency relaxed (1:49)."
+
+RUN DEB_BUILD_OPTIONS="nocheck parallel=$(nproc)" dpkg-buildpackage -us -uc -b > /src/build.log 2>&1 \
+ || (tail -80 /src/build.log; exit 1)

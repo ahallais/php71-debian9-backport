@@ -1,0 +1,4 @@
+Number of tests : 3274              3096
+Tests skipped   :  178 (  5.4%) --------
+Tests failed    :    8 (  0.2%) (  0.3%)
+Tests passed    : 3081 ( 94.1%) ( 99.5%)
