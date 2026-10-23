@@ -18,8 +18,8 @@ RUN mk-build-deps debian/control \
 
 # Local version suffix so it sorts above 7.1.20-1 and is identifiable on the hosts
 RUN DEBEMAIL="arnaud.hallais@havas.com" DEBFULLNAME="Arnaud Hallais" \
-    dch -b -v 7.1.33-80~deb9+1 -D stretch \
-    "Rebuild of Sury 7.1.33-80 for Debian 9 (CVE-2026-109618, CVE-2026-109619); telemetry patch 0177 dropped; php-common dependency relaxed to stretch (1:49)."
+    dch -b -v 7.1.33-80~deb9+1s1 -D stretch \
+    "Rebuild of Sury 7.1.33-80 for pure Debian 9 hosts (libc6 2.24, libcurl3, libicu57) (CVE-2026-109618, CVE-2026-109619); telemetry patch 0177 dropped; php-common dependency relaxed to stretch (1:49)."
 
 RUN DEB_BUILD_OPTIONS="nocheck parallel=$(nproc)" dpkg-buildpackage -us -uc -b > /src/build.log 2>&1 \
  || (tail -80 /src/build.log; exit 1)

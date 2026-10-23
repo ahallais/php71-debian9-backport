@@ -4,6 +4,7 @@ phpt/*.log
 
 # Intermediate / test package directories
 out/
+out-stretch/
 new/
 old/
 snap/
